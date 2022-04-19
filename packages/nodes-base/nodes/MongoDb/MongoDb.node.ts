@@ -39,7 +39,7 @@ export class MongoDb implements INodeType {
 
 		if (operation === 'aggregate') {
 			returnItems = await aggregateOps.call(this, mdb);
-		if (operation === 'delete') {
+		} else if (operation === 'delete') {
 			returnItems = await deleteOps.call(this, mdb);
 		} else if (operation === 'find') {
 			returnItems = await findOps.call(this, mdb);
