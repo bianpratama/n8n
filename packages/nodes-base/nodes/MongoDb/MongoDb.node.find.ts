@@ -1,6 +1,6 @@
 import { Db } from 'mongodb';
 import { IExecuteFunctions } from 'n8n-core';
-import { IDataObject, INodeExecutionData } from 'n8n-workflow';
+import { IDataObject, INodeExecutionData, JsonObject } from 'n8n-workflow';
 import { handleObjectId } from './MongoDb.node.utils';
 
 export async function findOps(this: IExecuteFunctions, mdb: Db): Promise<INodeExecutionData[]> {
@@ -38,7 +38,7 @@ export async function findOps(this: IExecuteFunctions, mdb: Db): Promise<INodeEx
 		return this.helpers.returnJsonArray(queryResult as IDataObject[]);
 	} catch (error: any) {
 		if (this.continueOnFail()) {
-			return this.helpers.returnJsonArray({ error: error.message });
+			return this.helpers.returnJsonArray({ error: (error as JsonObject).message });
 		} else {
 			throw error;
 		}

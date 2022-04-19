@@ -1,6 +1,6 @@
 import { Db, FilterQuery } from 'mongodb';
 import { IExecuteFunctions } from 'n8n-core';
-import { INodeExecutionData } from 'n8n-workflow';
+import { INodeExecutionData, JsonObject } from 'n8n-workflow';
 
 export async function deleteOps(this: IExecuteFunctions, mdb: Db): Promise<INodeExecutionData[]> {
 	try {
@@ -12,7 +12,7 @@ export async function deleteOps(this: IExecuteFunctions, mdb: Db): Promise<INode
 		return this.helpers.returnJsonArray([{ deletedCount }]);
 	} catch (error: any) {
 		if (this.continueOnFail()) {
-			return this.helpers.returnJsonArray({ error: error.message });
+			return this.helpers.returnJsonArray({ error: (error as JsonObject).message });
 		} else {
 			throw error;
 		}

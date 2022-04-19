@@ -1,6 +1,6 @@
 import { Db, ObjectID } from 'mongodb';
 import { IExecuteFunctions } from 'n8n-core';
-import { IDataObject, INodeExecutionData } from 'n8n-workflow';
+import { IDataObject, INodeExecutionData, JsonObject } from 'n8n-workflow';
 import { getItemCopy, handleDateFields, handleObjectIdFields } from './MongoDb.node.utils';
 
 export async function bulkUpdateOps(
@@ -69,7 +69,7 @@ export async function bulkUpdateOps(
 		return this.helpers.returnJsonArray(updateItems);
 	} catch (error: any) {
 		if (this.continueOnFail()) {
-			return this.helpers.returnJsonArray({ error: error.message });
+			return this.helpers.returnJsonArray({ error: (error as JsonObject).message });
 		} else {
 			throw error;
 		}

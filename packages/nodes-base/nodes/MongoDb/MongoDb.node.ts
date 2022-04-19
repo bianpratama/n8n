@@ -6,6 +6,7 @@ import {
 	INodeTypeDescription,
 	NodeOperationError,
 } from 'n8n-workflow';
+import { aggregateOps } from './MongoDb.node.aggregate';
 import { bulkUpdateOps } from './MongoDb.node.bulkUpdate';
 import { deleteOps } from './MongoDb.node.delete';
 import { findOps } from './MongoDb.node.find';
@@ -13,6 +14,7 @@ import { insertOps } from './MongoDb.node.insert';
 import { nodeDescription } from './MongoDb.node.options';
 import { updateOps } from './MongoDb.node.update';
 import { validateAndResolveMongoCredentials } from './MongoDb.node.utils';
+import { IMongoNodeOperation } from './MongoDb.node.types';
 
 export class MongoDb implements INodeType {
 	description: INodeTypeDescription = nodeDescription;
@@ -33,8 +35,10 @@ export class MongoDb implements INodeType {
 		let returnItems: INodeExecutionData[] = [];
 
 		const items = this.getInputData();
-		const operation = this.getNodeParameter('operation', 0) as string;
+		const operation = this.getNodeParameter('operation', 0) as IMongoNodeOperation;
 
+		if (operation === 'aggregate') {
+			returnItems = await aggregateOps.call(this, mdb);
 		if (operation === 'delete') {
 			returnItems = await deleteOps.call(this, mdb);
 		} else if (operation === 'find') {

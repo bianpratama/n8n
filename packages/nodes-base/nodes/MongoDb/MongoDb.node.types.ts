@@ -49,3 +49,5 @@ export type IMongoCredentials = {
 	 */
 	connectionString: string;
 };
+
+export type IMongoNodeOperation = 'aggregate' | 'delete' | 'find' | 'insert' | 'update' | 'bulkUpdate'
